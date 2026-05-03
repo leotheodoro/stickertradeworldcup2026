@@ -1,0 +1,48 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String        @id @default(cuid())
+  name      String
+  email     String        @unique
+  password  String
+  phone     String
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  stickers  UserSticker[]
+}
+
+model Sticker {
+  id      String          @id @default(cuid())
+  code    String          @unique
+  name    String
+  country String
+  section StickerSection
+  isFoil  Boolean         @default(false)
+  order   Int
+  users   UserSticker[]
+}
+
+enum StickerSection {
+  country
+  intro
+  museum
+  coca_cola
+}
+
+model UserSticker {
+  id        String   @id @default(cuid())
+  userId    String
+  stickerId String
+  quantity  Int      @default(1)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sticker   Sticker  @relation(fields: [stickerId], references: [id])
+
+  @@unique([userId, stickerId])
+}
