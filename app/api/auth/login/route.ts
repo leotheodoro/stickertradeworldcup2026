@@ -25,6 +25,7 @@ export async function POST(req: Request) {
   }
 
   const token = await signJwt({ sub: user.id })
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { password: _pw, ...safeUser } = user
 
   const res = NextResponse.json({ user: safeUser })

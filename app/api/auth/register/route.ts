@@ -26,6 +26,7 @@ export async function POST(req: Request) {
   })
 
   // Ensure password is never sent in response (guards against mock or future schema changes)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { password: _pw, ...user } = created as typeof created & { password?: string }
 
   const token = await signJwt({ sub: user.id })
