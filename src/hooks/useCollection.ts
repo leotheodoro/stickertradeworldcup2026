@@ -1,15 +1,57 @@
 // hooks/useCollection.ts
 'use client'
 
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useMutationState, useQueryClient } from '@tanstack/react-query'
+
+interface StickerQueryData {
+  stickers: Array<{
+    id: string
+    quantity: number | null
+  }>
+}
+
+interface UpdateVariables {
+  stickerId: string
+  quantity: number
+}
+
+interface MutationContext {
+  snapshots: Array<[readonly unknown[], StickerQueryData | undefined]>
+}
 
 export function useCollection() {
   const queryClient = useQueryClient()
 
   const invalidate = () => queryClient.invalidateQueries({ queryKey: ['stickers'] })
 
+  function setStickerQuantity(stickerId: string, quantity: number | null) {
+    queryClient.setQueriesData<StickerQueryData>({ queryKey: ['stickers'] }, (current) => {
+      if (!current) return current
+
+      return {
+        ...current,
+        stickers: current.stickers.map((sticker) =>
+          sticker.id === stickerId ? { ...sticker, quantity } : sticker,
+        ),
+      }
+    })
+  }
+
+  async function captureSnapshots() {
+    await queryClient.cancelQueries({ queryKey: ['stickers'] })
+
+    return queryClient.getQueriesData<StickerQueryData>({ queryKey: ['stickers'] })
+  }
+
+  function restoreSnapshots(snapshots: MutationContext['snapshots']) {
+    for (const [queryKey, data] of snapshots) {
+      queryClient.setQueryData(queryKey, data)
+    }
+  }
+
   const updateSticker = useMutation({
-    mutationFn: async ({ stickerId, quantity }: { stickerId: string; quantity: number }) => {
+    mutationKey: ['collection', 'update'],
+    mutationFn: async ({ stickerId, quantity }: UpdateVariables) => {
       const res = await fetch(`/api/collection/${stickerId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -17,15 +59,42 @@ export function useCollection() {
       })
       if (!res.ok) throw new Error('Erro ao atualizar figurinha')
     },
-    onSuccess: invalidate,
+    onMutate: async ({ stickerId, quantity }): Promise<MutationContext> => {
+      const snapshots = await captureSnapshots()
+      setStickerQuantity(stickerId, quantity)
+      return { snapshots }
+    },
+    onError: (_error, _variables, context) => {
+      if (context) restoreSnapshots(context.snapshots)
+    },
+    onSettled: invalidate,
   })
 
   const removeSticker = useMutation({
+    mutationKey: ['collection', 'remove'],
     mutationFn: async (stickerId: string) => {
       const res = await fetch(`/api/collection/${stickerId}`, { method: 'DELETE' })
       if (!res.ok) throw new Error('Erro ao remover figurinha')
     },
-    onSuccess: invalidate,
+    onMutate: async (stickerId): Promise<MutationContext> => {
+      const snapshots = await captureSnapshots()
+      setStickerQuantity(stickerId, null)
+      return { snapshots }
+    },
+    onError: (_error, _variables, context) => {
+      if (context) restoreSnapshots(context.snapshots)
+    },
+    onSettled: invalidate,
+  })
+
+  const pendingUpdates = useMutationState<UpdateVariables>({
+    filters: { mutationKey: ['collection', 'update'], status: 'pending' },
+    select: (mutation) => mutation.state.variables as UpdateVariables,
+  })
+
+  const pendingRemovals = useMutationState<string>({
+    filters: { mutationKey: ['collection', 'remove'], status: 'pending' },
+    select: (mutation) => mutation.state.variables as string,
   })
 
   async function toggleOwned(stickerId: string) {
@@ -45,11 +114,11 @@ export function useCollection() {
   }
 
   function isUpdatingSticker(stickerId: string) {
-    return updateSticker.isPending && updateSticker.variables?.stickerId === stickerId
+    return pendingUpdates.some((variables) => variables.stickerId === stickerId)
   }
 
   function isRemovingSticker(stickerId: string) {
-    return removeSticker.isPending && removeSticker.variables === stickerId
+    return pendingRemovals.some((pendingStickerId) => pendingStickerId === stickerId)
   }
 
   function isStickerPending(stickerId: string) {

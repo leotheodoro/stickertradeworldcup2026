@@ -15,14 +15,8 @@ export function StickerGrid() {
   const { stickers, isLoading } = useStickers({ country, search })
   // unfiltered query for the persistent filter chips (React Query caches this)
   const { countries } = useStickers()
-  const {
-    toggleOwned,
-    updateQuantity,
-    removeSticker,
-    isStickerPending,
-    isUpdatingSticker,
-    isRemovingSticker,
-  } = useCollection()
+  const { toggleOwned, updateQuantity, removeSticker, isUpdatingSticker, isRemovingSticker } =
+    useCollection()
 
   const handleSearch = useCallback((v: string) => setSearch(v), [])
 
@@ -45,7 +39,7 @@ export function StickerGrid() {
           key={countryName}
           className="rounded-[2rem] border border-[#d9e2ff] bg-white/88 p-4 shadow-[0_18px_44px_rgba(6,35,91,0.06)] backdrop-blur sm:p-5"
         >
-          <div className="mb-4 flex items-center justify-between gap-4">
+          <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-xs uppercase tracking-[0.28em] text-[#bf0a30]">Seleção</p>
               <h2 className="mt-2 text-2xl font-semibold text-[#06235b]">{countryName}</h2>
@@ -55,7 +49,7 @@ export function StickerGrid() {
             </span>
           </div>
 
-          <div className="grid grid-cols-4 gap-3 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-9 2xl:grid-cols-10">
             {group.map((sticker) => (
               <StickerCard
                 key={sticker.id}
@@ -63,7 +57,6 @@ export function StickerGrid() {
                 onToggleOwned={toggleOwned}
                 onUpdateQuantity={updateQuantity}
                 onRemove={removeSticker}
-                isPending={isStickerPending(sticker.id)}
                 isSaving={isUpdatingSticker(sticker.id)}
                 isRemoving={isRemovingSticker(sticker.id)}
               />

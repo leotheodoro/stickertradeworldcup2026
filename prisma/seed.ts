@@ -2,9 +2,29 @@
 import { PrismaClient, StickerSection } from '@prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
 import { ALBUM_COUNTRIES } from '../src/lib/sticker-album'
+import teamStickerNames from './data/team-sticker-names.json'
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! })
 const prisma = new PrismaClient({ adapter })
+
+const MUSEUM_STICKER_NAMES = [
+  'Italy 1934 - FIFA Museum',
+  'Uruguay 1950 - FIFA Museum',
+  'West Germany 1954 - FIFA Museum',
+  'Brazil 1962 - FIFA Museum',
+  'West Germany 1974 - FIFA Museum',
+  'Argentina 1986 - FIFA Museum',
+  'Brazil 1994 - FIFA Museum',
+  'Brazil 2002 - FIFA Museum',
+  'Italy 2006 - FIFA Museum',
+  'Germany 2014 - FIFA Museum',
+  'Argentina 2022 - FIFA Museum',
+] as const
+
+function normalizeCountryStickerName(name: string) {
+  const separatorIndex = name.lastIndexOf(' - ')
+  return separatorIndex === -1 ? name : name.slice(0, separatorIndex)
+}
 
 async function main() {
   const introStickers = [
@@ -84,7 +104,7 @@ async function main() {
 
   const museumStickers = Array.from({ length: 11 }, (_, i) => ({
     code: `FWC${i + 9}`,
-    name: `FIFA Museum ${i + 1}`,
+    name: MUSEUM_STICKER_NAMES[i],
     country: 'FIFA Museum',
     section: StickerSection.museum,
     isFoil: false,
@@ -100,16 +120,22 @@ async function main() {
     order: i + 1,
   }))
 
-  const countryStickers = ALBUM_COUNTRIES.flatMap(({ code, name }) =>
-    Array.from({ length: 20 }, (_, i) => ({
-      code: `${code}${i + 1}`,
-      name: i === 0 ? `Escudo - ${name}` : `Jogador ${i} - ${name}`,
+  const countryStickers = ALBUM_COUNTRIES.flatMap(({ code, name }) => {
+    const stickers = teamStickerNames[code as keyof typeof teamStickerNames]
+
+    if (!stickers || stickers.length !== 20) {
+      throw new Error(`Missing or invalid checklist data for ${code}`)
+    }
+
+    return stickers.map((stickerName, index) => ({
+      code: `${code}${index + 1}`,
+      name: normalizeCountryStickerName(stickerName),
       country: name,
       section: StickerSection.country,
-      isFoil: i === 0,
-      order: i + 1,
-    })),
-  )
+      isFoil: index === 0,
+      order: index + 1,
+    }))
+  })
 
   const all = [...introStickers, ...museumStickers, ...cocaColaStickers, ...countryStickers]
 
