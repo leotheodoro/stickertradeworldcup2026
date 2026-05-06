@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils'
 
 const NAV = [
   { href: '/collection', label: 'Minha coleção' },
+  { href: '/match', label: 'Com quem trocar?' },
   { href: '/trade', label: 'Trocar figurinhas' },
 ]
 
