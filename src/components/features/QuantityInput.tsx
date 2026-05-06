@@ -2,7 +2,6 @@ interface QuantityInputProps {
   stickerId: string
   currentQuantity: number
   onSave: (stickerId: string, quantity: number) => Promise<void>
-  isSaving?: boolean
   isRemoving?: boolean
 }
 
@@ -10,11 +9,10 @@ export function QuantityInput({
   stickerId,
   currentQuantity,
   onSave,
-  isSaving = false,
   isRemoving = false,
 }: QuantityInputProps) {
   const duplicates = Math.max(0, currentQuantity - 1)
-  const isBusy = isSaving || isRemoving
+  const isBusy = isRemoving
 
   return (
     <div className="rounded-[1.1rem] border border-[#d9e2ff] bg-white/92 px-3 py-2.5 shadow-[0_10px_24px_rgba(6,35,91,0.05)]">
@@ -22,9 +20,6 @@ export function QuantityInput({
         <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#06235b]/65">
           Reps
         </span>
-        {isBusy && (
-          <span className="h-3 w-3 animate-spin rounded-full border-2 border-[#06235b]/45 border-t-transparent" />
-        )}
       </div>
 
       <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2">

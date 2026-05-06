@@ -15,8 +15,7 @@ export function StickerGrid() {
   const { stickers, isLoading } = useStickers({ country, search })
   // unfiltered query for the persistent filter chips (React Query caches this)
   const { countries } = useStickers()
-  const { toggleOwned, updateQuantity, removeSticker, isUpdatingSticker, isRemovingSticker } =
-    useCollection()
+  const { toggleOwned, updateQuantity, removeSticker, isRemovingSticker } = useCollection()
 
   const handleSearch = useCallback((v: string) => setSearch(v), [])
 
@@ -57,7 +56,6 @@ export function StickerGrid() {
                 onToggleOwned={toggleOwned}
                 onUpdateQuantity={updateQuantity}
                 onRemove={removeSticker}
-                isSaving={isUpdatingSticker(sticker.id)}
                 isRemoving={isRemovingSticker(sticker.id)}
               />
             ))}

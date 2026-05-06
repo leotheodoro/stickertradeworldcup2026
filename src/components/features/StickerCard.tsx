@@ -26,7 +26,6 @@ export function StickerCard({
   onToggleOwned,
   onUpdateQuantity,
   onRemove,
-  isSaving = false,
   isRemoving = false,
 }: StickerCardProps) {
   const owned = sticker.quantity !== null
@@ -91,9 +90,6 @@ export function StickerCard({
               Toque para marcar
             </span>
           )}
-          {owned && isSaving && (
-            <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-[#06235b]/45 border-t-transparent" />
-          )}
         </div>
       </div>
       {owned && (
@@ -102,7 +98,6 @@ export function StickerCard({
             stickerId={sticker.id}
             currentQuantity={sticker.quantity!}
             onSave={onUpdateQuantity}
-            isSaving={isSaving}
             isRemoving={isRemoving}
           />
         </div>
