@@ -1,73 +1,89 @@
 // prisma/seed.ts
 import { PrismaClient, StickerSection } from '@prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
+import { ALBUM_COUNTRIES } from '../src/lib/sticker-album'
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! })
 const prisma = new PrismaClient({ adapter })
 
-const COUNTRIES: { code: string; name: string }[] = [
-  { code: 'ALG', name: 'Algeria' },
-  { code: 'ARG', name: 'Argentina' },
-  { code: 'AUS', name: 'Australia' },
-  { code: 'AUT', name: 'Austria' },
-  { code: 'BEL', name: 'Belgium' },
-  { code: 'BIH', name: 'Bosnia e Herzegovina' },
-  { code: 'BRA', name: 'Brasil' },
-  { code: 'CAN', name: 'Canadá' },
-  { code: 'CPV', name: 'Cabo Verde' },
-  { code: 'COL', name: 'Colômbia' },
-  { code: 'COD', name: 'Congo DR' },
-  { code: 'CRO', name: 'Croácia' },
-  { code: 'CUW', name: 'Curaçao' },
-  { code: 'CZE', name: 'Tchéquia' },
-  { code: 'ECU', name: 'Equador' },
-  { code: 'EGY', name: 'Egito' },
-  { code: 'ENG', name: 'Inglaterra' },
-  { code: 'FRA', name: 'França' },
-  { code: 'GER', name: 'Alemanha' },
-  { code: 'GHA', name: 'Gana' },
-  { code: 'HAI', name: 'Haiti' },
-  { code: 'IRN', name: 'Irã' },
-  { code: 'IRQ', name: 'Iraque' },
-  { code: 'CIV', name: 'Costa do Marfim' },
-  { code: 'JPN', name: 'Japão' },
-  { code: 'JOR', name: 'Jordânia' },
-  { code: 'MEX', name: 'México' },
-  { code: 'MAR', name: 'Marrocos' },
-  { code: 'NED', name: 'Holanda' },
-  { code: 'NZL', name: 'Nova Zelândia' },
-  { code: 'NOR', name: 'Noruega' },
-  { code: 'PAN', name: 'Panamá' },
-  { code: 'PAR', name: 'Paraguai' },
-  { code: 'POR', name: 'Portugal' },
-  { code: 'QAT', name: 'Qatar' },
-  { code: 'KSA', name: 'Arábia Saudita' },
-  { code: 'SCO', name: 'Escócia' },
-  { code: 'SEN', name: 'Senegal' },
-  { code: 'RSA', name: 'África do Sul' },
-  { code: 'KOR', name: 'Coreia do Sul' },
-  { code: 'ESP', name: 'Espanha' },
-  { code: 'SWE', name: 'Suécia' },
-  { code: 'SUI', name: 'Suíça' },
-  { code: 'TUN', name: 'Tunísia' },
-  { code: 'TUR', name: 'Turquia' },
-  { code: 'URU', name: 'Uruguai' },
-  { code: 'USA', name: 'Estados Unidos' },
-  { code: 'UZB', name: 'Uzbequistão' },
-]
-
 async function main() {
-  const introStickers = Array.from({ length: 9 }, (_, i) => ({
-    code: `INT${i + 1}`,
-    name: `Introdução ${i + 1}`,
-    country: 'Introdução',
-    section: StickerSection.intro,
-    isFoil: false,
-    order: i + 1,
-  }))
+  const introStickers = [
+    {
+      code: '00',
+      name: 'Panini Logo',
+      country: 'Introdução',
+      section: StickerSection.intro,
+      isFoil: true,
+      order: 1,
+    },
+    {
+      code: 'FWC1',
+      name: 'Official Emblem',
+      country: 'Introdução',
+      section: StickerSection.intro,
+      isFoil: true,
+      order: 2,
+    },
+    {
+      code: 'FWC2',
+      name: 'Official Emblem',
+      country: 'Introdução',
+      section: StickerSection.intro,
+      isFoil: true,
+      order: 3,
+    },
+    {
+      code: 'FWC3',
+      name: 'Official Mascots',
+      country: 'Introdução',
+      section: StickerSection.intro,
+      isFoil: true,
+      order: 4,
+    },
+    {
+      code: 'FWC4',
+      name: 'Official Slogan',
+      country: 'Introdução',
+      section: StickerSection.intro,
+      isFoil: true,
+      order: 5,
+    },
+    {
+      code: 'FWC5',
+      name: 'Official Ball',
+      country: 'Introdução',
+      section: StickerSection.intro,
+      isFoil: true,
+      order: 6,
+    },
+    {
+      code: 'FWC6',
+      name: 'Canada - Host Countries & Cities',
+      country: 'Introdução',
+      section: StickerSection.intro,
+      isFoil: true,
+      order: 7,
+    },
+    {
+      code: 'FWC7',
+      name: 'Mexico - Host Countries & Cities',
+      country: 'Introdução',
+      section: StickerSection.intro,
+      isFoil: true,
+      order: 8,
+    },
+    {
+      code: 'FWC8',
+      name: 'USA - Host Countries & Cities',
+      country: 'Introdução',
+      section: StickerSection.intro,
+      isFoil: true,
+      order: 9,
+    },
+  ]
 
   const museumStickers = Array.from({ length: 11 }, (_, i) => ({
-    code: `MUS${i + 1}`,
+    code: `FWC${i + 9}`,
     name: `FIFA Museum ${i + 1}`,
     country: 'FIFA Museum',
     section: StickerSection.museum,
@@ -84,7 +100,7 @@ async function main() {
     order: i + 1,
   }))
 
-  const countryStickers = COUNTRIES.flatMap(({ code, name }) =>
+  const countryStickers = ALBUM_COUNTRIES.flatMap(({ code, name }) =>
     Array.from({ length: 20 }, (_, i) => ({
       code: `${code}${i + 1}`,
       name: i === 0 ? `Escudo - ${name}` : `Jogador ${i} - ${name}`,
@@ -97,7 +113,57 @@ async function main() {
 
   const all = [...introStickers, ...museumStickers, ...cocaColaStickers, ...countryStickers]
 
-  await prisma.sticker.createMany({ data: all, skipDuplicates: true })
+  const legacyRenames = [
+    ...introStickers.map((sticker, index) => ({ oldCode: `INT${index + 1}`, sticker })),
+    ...museumStickers.map((sticker, index) => ({ oldCode: `MUS${index + 1}`, sticker })),
+  ]
+
+  for (const { oldCode, sticker } of legacyRenames) {
+    const legacy = await prisma.sticker.findUnique({
+      where: { code: oldCode },
+      select: { id: true },
+    })
+
+    if (!legacy) continue
+
+    const current = await prisma.sticker.findUnique({
+      where: { code: sticker.code },
+      select: { id: true },
+    })
+
+    if (current && current.id !== legacy.id) {
+      await prisma.sticker.update({
+        where: { id: legacy.id },
+        data: {
+          name: sticker.name,
+          country: sticker.country,
+          section: sticker.section,
+          isFoil: sticker.isFoil,
+          order: sticker.order,
+        },
+      })
+      continue
+    }
+
+    await prisma.sticker.update({
+      where: { id: legacy.id },
+      data: sticker,
+    })
+  }
+
+  for (const sticker of all) {
+    await prisma.sticker.upsert({
+      where: { code: sticker.code },
+      update: {
+        name: sticker.name,
+        country: sticker.country,
+        section: sticker.section,
+        isFoil: sticker.isFoil,
+        order: sticker.order,
+      },
+      create: sticker,
+    })
+  }
 
   console.log(`Seeded ${all.length} stickers`)
 }
