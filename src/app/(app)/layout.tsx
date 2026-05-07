@@ -22,7 +22,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen">
       <header className="relative overflow-hidden border-b border-white/10 bg-[#041437] text-white shadow-[0_24px_64px_rgba(4,20,55,0.36)]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(245,197,24,0.22),transparent_24%),radial-gradient(circle_at_top_right,rgba(191,10,48,0.22),transparent_28%),linear-gradient(135deg,#041437_0%,#06235b_55%,#0a3c88_100%)]" />
-        <div className="absolute inset-y-0 right-[-8rem] w-[26rem] rounded-full bg-white/10 blur-3xl" />
+        <div className="pointer-events-none absolute left-[-7rem] top-[-6rem] h-44 w-44 rounded-full bg-[#f5c518]/18 blur-3xl" />
+        <div className="pointer-events-none absolute right-[-9rem] top-[-4rem] h-64 w-64 rounded-full bg-white/10 blur-3xl" />
+        <div className="pointer-events-none absolute bottom-[-6rem] right-[14%] h-40 w-40 rounded-full bg-[#bf0a30]/14 blur-3xl" />
         <div className="relative mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
             <Link href="/collection" className="flex items-center gap-4">

@@ -64,7 +64,9 @@ export default function TradePage() {
   return (
     <div className="space-y-6">
       <section className="relative overflow-hidden rounded-[2rem] border border-[#d9e2ff] bg-white/88 p-6 shadow-[0_20px_50px_rgba(6,35,91,0.08)] backdrop-blur sm:p-8">
-        <div className="absolute inset-y-0 right-0 w-1/3 bg-[radial-gradient(circle_at_top,rgba(191,10,48,0.12),transparent_54%)]" />
+        <div className="pointer-events-none absolute right-[-5rem] top-[-4rem] h-40 w-40 rounded-full bg-[#bf0a30]/18 blur-3xl" />
+        <div className="pointer-events-none absolute bottom-[-5rem] right-[18%] h-32 w-32 rounded-full bg-[#06235b]/10 blur-3xl" />
+        <div className="pointer-events-none absolute inset-y-6 right-6 w-1/3 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.45)_0%,rgba(191,10,48,0.12)_34%,transparent_74%)] blur-2xl" />
         <div className="relative">
           <p className="text-sm font-medium uppercase tracking-[0.28em] text-[#bf0a30]">
             Mercado de trocas
