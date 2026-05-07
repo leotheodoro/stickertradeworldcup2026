@@ -9,7 +9,7 @@ function getSecret() {
   return new TextEncoder().encode(secret)
 }
 
-export async function signJwt(payload: { sub: string }): Promise<string> {
+export async function signJwt(payload: { sub: string; locationComplete?: boolean }): Promise<string> {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()

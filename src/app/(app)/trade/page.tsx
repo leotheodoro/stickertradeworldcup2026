@@ -6,6 +6,7 @@ import { Suspense } from 'react'
 import { SearchBar } from '@/components/features/SearchBar'
 import { TradingPartnerCard } from '@/components/features/TradingPartnerCard'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useAuth } from '@/hooks/useAuth'
 import { useStickers } from '@/hooks/useStickers'
 import { useTrade } from '@/hooks/useTrade'
 
@@ -53,6 +54,7 @@ export default function TradePage() {
     name: string
   } | null>(null)
 
+  const { user } = useAuth()
   const { stickers } = useStickers({ search })
   const matchingStickers = search.trim().length > 0 ? stickers.slice(0, 10) : []
 
@@ -80,6 +82,18 @@ export default function TradePage() {
           </p>
         </div>
       </section>
+
+      {user?.city && user.uf && (
+        <div className="rounded-[1.5rem] border border-[#d9e2ff] bg-[linear-gradient(180deg,rgba(246,248,255,0.94),rgba(255,255,255,0.88))] px-5 py-4 shadow-[0_14px_34px_rgba(6,35,91,0.06)]">
+          <p className="text-sm font-semibold text-[#06235b]">
+            Você está vendo pessoas de {user.city}/{user.uf}.
+          </p>
+          <p className="mt-1 text-sm leading-6 text-slate-600">
+            A busca de trocas mostra somente usuários da sua cidade para facilitar combinações mais
+            viáveis no mundo real.
+          </p>
+        </div>
+      )}
 
       <div>
         <SearchBar

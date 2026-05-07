@@ -9,6 +9,9 @@ vi.mock('@/lib/auth', () => ({
     name: 'Ana',
     email: 'a@a.com',
     phone: '11',
+    uf: 'SP',
+    city: 'São Paulo',
+    cityIbgeCode: '3550308',
   }),
 }))
 
@@ -54,5 +57,8 @@ describe('GET /api/trade/search', () => {
     expect(body.partners).toHaveLength(1)
     expect(body.partners[0].name).toBe('Carlos')
     expect(body.partners[0].duplicatesAvailable).toBe(2) // quantity - 1
+    expect(vi.mocked(prisma.userSticker.findMany).mock.calls[0]?.[0]).toMatchObject({
+      where: { user: { cityIbgeCode: '3550308' } },
+    })
   })
 })

@@ -7,6 +7,12 @@ import { tradeSearchSchema } from '@/lib/validation/trade.schema'
 export async function GET(req: Request) {
   const user = await getAuthUser()
   if (!user) return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
+  if (!user.cityIbgeCode) {
+    return NextResponse.json(
+      { error: 'Complete sua localização para buscar trocas na sua cidade' },
+      { status: 400 },
+    )
+  }
 
   const { searchParams } = new URL(req.url)
   const result = tradeSearchSchema.safeParse({ stickerId: searchParams.get('stickerId') })
@@ -22,6 +28,7 @@ export async function GET(req: Request) {
       stickerId,
       quantity: { gte: 2 },
       userId: { not: user.id },
+      user: { cityIbgeCode: user.cityIbgeCode },
     },
     include: {
       user: { select: { id: true, name: true, phone: true, email: true } },

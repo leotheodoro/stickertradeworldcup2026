@@ -15,6 +15,9 @@ const mockUser = {
   name: 'Ana',
   email: 'ana@test.com',
   phone: '11999887766',
+  uf: 'SP',
+  city: 'São Paulo',
+  cityIbgeCode: '3550308',
   createdAt: new Date(),
   updatedAt: new Date(),
 }
@@ -34,6 +37,9 @@ describe('POST /api/auth/register', () => {
         email: 'ana@test.com',
         password: 'senhaforte',
         phone: '11999887766',
+        uf: 'SP',
+        city: 'São Paulo',
+        cityIbgeCode: '3550308',
       }),
     })
 
@@ -56,6 +62,9 @@ describe('POST /api/auth/register', () => {
         email: 'ana@test.com',
         password: 'senhaforte',
         phone: '11999887766',
+        uf: 'SP',
+        city: 'São Paulo',
+        cityIbgeCode: '3550308',
       }),
     })
 

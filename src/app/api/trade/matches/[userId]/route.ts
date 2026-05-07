@@ -10,6 +10,12 @@ export async function GET(
 ) {
   const user = await getAuthUser()
   if (!user) return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
+  if (!user.cityIbgeCode) {
+    return NextResponse.json(
+      { error: 'Complete sua localização para ver trocas na sua cidade' },
+      { status: 400 },
+    )
+  }
 
   const result = tradeMatchParamsSchema.safeParse(await params)
   if (!result.success) {
@@ -18,10 +24,10 @@ export async function GET(
 
   const partner = await prisma.user.findUnique({
     where: { id: result.data.userId },
-    select: { id: true, name: true, phone: true },
-  })
+    select: { id: true, name: true, phone: true, cityIbgeCode: true },
+  } as never)
 
-  if (!partner || partner.id === user.id) {
+  if (!partner || partner.id === user.id || partner.cityIbgeCode !== user.cityIbgeCode) {
     return NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 })
   }
 

@@ -6,6 +6,7 @@ vi.mock('@/lib/prisma', () => ({
     user: {
       create: vi.fn(),
       findUnique: vi.fn(),
+      update: vi.fn(),
     },
     sticker: {
       findMany: vi.fn(),

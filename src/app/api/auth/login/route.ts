@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/prisma'
 import { signJwt } from '@/lib/jwt'
+import { hasCompleteLocation } from '@/lib/location'
 import { loginSchema } from '@/lib/validation/auth.schema'
 
 export async function POST(req: Request) {
@@ -24,7 +25,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Credenciais inválidas' }, { status: 401 })
   }
 
-  const token = await signJwt({ sub: user.id })
+  const token = await signJwt({
+    sub: user.id,
+    locationComplete: hasCompleteLocation(user as typeof user & {
+      uf?: string | null
+      city?: string | null
+      cityIbgeCode?: string | null
+    }),
+  })
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { password: _pw, ...safeUser } = user
 

@@ -5,11 +5,52 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { LocationFields } from '@/components/features/LocationFields'
+
+type FieldErrors = Partial<Record<'name' | 'email' | 'password' | 'phone' | 'uf' | 'city' | 'cityIbgeCode', string>>
+
+function getFieldErrors(error: unknown): FieldErrors {
+  if (!error || typeof error !== 'object' || !('fieldErrors' in error)) return {}
+
+  const fieldErrors = (error as { fieldErrors?: Record<string, string[] | undefined> }).fieldErrors ?? {}
+
+  return Object.fromEntries(
+    Object.entries(fieldErrors)
+      .map(([key, value]) => [key, value?.[0]])
+      .filter((entry): entry is [string, string] => Boolean(entry[1])),
+  ) as FieldErrors
+}
+
+function getErrorMessage(error: unknown) {
+  if (typeof error === 'string') return error
+
+  if (error && typeof error === 'object') {
+    if ('formErrors' in error) {
+      const formErrors = (error as { formErrors?: string[] }).formErrors
+      if (formErrors?.[0]) return formErrors[0]
+    }
+
+    if ('error' in error && typeof (error as { error?: string }).error === 'string') {
+      return (error as { error: string }).error
+    }
+  }
+
+  return 'Erro ao cadastrar'
+}
 
 export default function RegisterPage() {
   const router = useRouter()
-  const [form, setForm] = useState({ name: '', email: '', password: '', phone: '' })
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    password: '',
+    phone: '',
+    uf: '',
+    city: '',
+    cityIbgeCode: '',
+  })
   const [error, setError] = useState('')
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
   const [loading, setLoading] = useState(false)
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -19,6 +60,7 @@ export default function RegisterPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError('')
+    setFieldErrors({})
     setLoading(true)
     try {
       const res = await fetch('/api/auth/register', {
@@ -28,7 +70,13 @@ export default function RegisterPage() {
       })
       if (!res.ok) {
         const data = await res.json()
-        throw new Error(data.error ?? 'Erro ao cadastrar')
+
+        if (data.error) {
+          setFieldErrors(getFieldErrors(data.error))
+          throw new Error(getErrorMessage(data.error))
+        }
+
+        throw new Error(getErrorMessage(data))
       }
       router.push('/collection')
     } catch (err) {
@@ -53,6 +101,7 @@ export default function RegisterPage() {
         value={form.name}
         onChange={handleChange}
         placeholder="João Silva"
+        error={fieldErrors.name}
         required
       />
       <Input
@@ -63,6 +112,7 @@ export default function RegisterPage() {
         value={form.email}
         onChange={handleChange}
         placeholder="seu@email.com"
+        error={fieldErrors.email}
         required
       />
       <Input
@@ -73,7 +123,13 @@ export default function RegisterPage() {
         value={form.phone}
         onChange={handleChange}
         placeholder="11999887766"
+        error={fieldErrors.phone}
         required
+      />
+      <LocationFields
+        value={form}
+        onChange={(location) => setForm((current) => ({ ...current, ...location }))}
+        errors={fieldErrors}
       />
       <Input
         id="password"
@@ -83,6 +139,7 @@ export default function RegisterPage() {
         value={form.password}
         onChange={handleChange}
         placeholder="Mínimo 8 caracteres"
+        error={fieldErrors.password}
         required
       />
       {error && <p className="text-sm text-[#BF0A30]">{error}</p>}

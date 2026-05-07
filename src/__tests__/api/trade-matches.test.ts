@@ -9,6 +9,9 @@ vi.mock('@/lib/auth', () => ({
     name: 'Ana',
     email: 'ana@example.com',
     phone: '11999999999',
+    uf: 'SP',
+    city: 'São Paulo',
+    cityIbgeCode: '3550308',
   }),
 }))
 
@@ -190,6 +193,9 @@ describe('GET /api/trade/matches', () => {
     expect(body.bestMatches[0].foilPairs).toBe(1)
     expect(body.bestMatches[0].regularPairs).toBe(1)
     expect(body.bestMatches[0].successRate).toBeGreaterThan(body.bestMatches[1].successRate)
+    expect(vi.mocked(prisma.userSticker.findMany).mock.calls[1]?.[0]).toMatchObject({
+      where: { user: { cityIbgeCode: '3550308' } },
+    })
 
     expect(body.canHelpYou).toHaveLength(1)
     expect(body.canHelpYou[0].name).toBe('Carla')
@@ -214,6 +220,7 @@ describe('GET /api/trade/matches/[userId]', () => {
       id: 'user-2',
       name: 'Bruno',
       phone: '21999999999',
+      cityIbgeCode: '3550308',
     } as never)
 
     vi.mocked(prisma.userSticker.findMany)

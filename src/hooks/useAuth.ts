@@ -8,6 +8,9 @@ interface User {
   name: string
   email: string
   phone: string
+  uf: string | null
+  city: string | null
+  cityIbgeCode: string | null
 }
 
 async function fetchMe(): Promise<User | null> {

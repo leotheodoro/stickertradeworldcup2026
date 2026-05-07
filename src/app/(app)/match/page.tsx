@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { TradeMatchCard } from '@/components/features/TradeMatchCard'
 import { TradeMatchDetailModal } from '@/components/features/TradeMatchDetailModal'
+import { useAuth } from '@/hooks/useAuth'
 import { Skeleton } from '@/components/ui/skeleton'
 import type { TradeMatchDetail, TradeMatchSummary } from '@/lib/trade-matches'
 
@@ -54,6 +55,7 @@ function MatchPageSkeleton() {
 
 export default function MatchPage() {
   const [selectedMatch, setSelectedMatch] = useState<TradeMatchSummary | null>(null)
+  const { user } = useAuth()
 
   const matchesQuery = useQuery<{
     bestMatches: TradeMatchSummary[]
@@ -97,6 +99,18 @@ export default function MatchPage() {
           </p>
         </div>
       </section>
+
+      {user?.city && user.uf && (
+        <div className="rounded-[1.5rem] border border-[#d9e2ff] bg-[linear-gradient(180deg,rgba(246,248,255,0.94),rgba(255,255,255,0.88))] px-5 py-4 shadow-[0_14px_34px_rgba(6,35,91,0.06)]">
+          <p className="text-sm font-semibold text-[#06235b]">
+            Você está vendo pessoas de {user.city}/{user.uf}.
+          </p>
+          <p className="mt-1 text-sm leading-6 text-slate-600">
+            O ranking compara apenas usuários da sua cidade, para priorizar trocas que realmente
+            podem sair do papel.
+          </p>
+        </div>
+      )}
 
       {matchesQuery.isLoading && <MatchPageSkeleton />}
 
