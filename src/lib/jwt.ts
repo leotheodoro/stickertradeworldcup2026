@@ -1,5 +1,7 @@
 // lib/jwt.ts
-import { SignJWT, jwtVerify, type JWTPayload } from 'jose'
+import type { JWTPayload } from 'jose'
+import { SignJWT } from 'jose/jwt/sign'
+import { jwtVerify } from 'jose/jwt/verify'
 
 function getSecret() {
   const secret = process.env.JWT_SECRET
