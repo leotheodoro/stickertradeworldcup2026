@@ -48,7 +48,7 @@ export function StickerGrid() {
             </span>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-9 2xl:grid-cols-10">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-[repeat(auto-fit,minmax(10.5rem,1fr))]">
             {group.map((sticker) => (
               <StickerCard
                 key={sticker.id}

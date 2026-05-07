@@ -22,7 +22,7 @@ export function QuantityInput({
         </span>
       </div>
 
-      <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 md:gap-2.5">
+      <div className="grid grid-cols-[1fr_auto_1fr] items-center justify-center gap-2 md:grid-cols-[2.75rem_auto_2.75rem] md:gap-2.5">
         <button
           type="button"
           disabled={isBusy || duplicates === 0}
@@ -30,12 +30,12 @@ export function QuantityInput({
             event.stopPropagation()
             void onSave(stickerId, Math.max(1, currentQuantity - 1))
           }}
-          className="flex h-10 w-full items-center justify-center rounded-full border border-[#d4ddf7] bg-[#f7f9ff] text-lg font-bold text-[#06235b] transition-colors hover:bg-[#eef3ff] disabled:cursor-not-allowed disabled:opacity-35 md:h-11 md:text-xl"
+          className="flex h-10 w-full items-center justify-center rounded-full border border-[#d4ddf7] bg-[#f7f9ff] text-lg font-bold text-[#06235b] transition-colors hover:bg-[#eef3ff] disabled:cursor-not-allowed disabled:opacity-35 md:h-11 md:w-11 md:text-xl"
           aria-label="Diminuir repetidas"
         >
           -
         </button>
-        <span className="min-w-7 text-center text-base font-semibold text-[#06235b] md:min-w-10 md:rounded-full md:bg-[#06235b]/8 md:px-3 md:py-1.5 md:text-base">
+        <span className="min-w-7 text-center text-base font-semibold text-[#06235b] md:min-w-12 md:rounded-full md:bg-[#06235b]/8 md:px-3 md:py-1.5 md:text-base">
           {duplicates}
         </span>
         <button
@@ -45,7 +45,7 @@ export function QuantityInput({
             event.stopPropagation()
             void onSave(stickerId, currentQuantity + 1)
           }}
-          className="flex h-10 w-full items-center justify-center rounded-full border border-[#d4ddf7] bg-[#f7f9ff] text-lg font-bold text-[#06235b] transition-colors hover:bg-[#eef3ff] disabled:cursor-not-allowed disabled:opacity-35 md:h-11 md:text-xl"
+          className="flex h-10 w-full items-center justify-center rounded-full border border-[#d4ddf7] bg-[#f7f9ff] text-lg font-bold text-[#06235b] transition-colors hover:bg-[#eef3ff] disabled:cursor-not-allowed disabled:opacity-35 md:h-11 md:w-11 md:text-xl"
           aria-label="Aumentar repetidas"
         >
           +
