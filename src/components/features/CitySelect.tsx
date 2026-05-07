@@ -68,6 +68,7 @@ export function CitySelect({
           id={id}
           type="button"
           disabled={disabled}
+          aria-expanded={open}
           onClick={() => setOpen((current) => !current)}
           className={cn(
             'flex w-full items-center justify-between rounded-2xl border border-[#d6def6] bg-white/88 px-4 py-3 text-sm shadow-[0_10px_24px_rgba(6,35,91,0.04)] outline-none transition-all',
@@ -76,7 +77,11 @@ export function CitySelect({
             error && 'border-[#BF0A30] focus-visible:border-[#BF0A30] focus-visible:ring-[#BF0A30]/20',
           )}
         >
-          <span className={value.city ? 'text-slate-800' : 'text-slate-400'}>
+          <span
+            className={cn(
+              value.city ? 'text-slate-800' : disabled ? 'text-slate-400' : 'text-slate-500',
+            )}
+          >
             {loading ? 'Carregando cidades...' : value.city || placeholder}
           </span>
           <span className="text-slate-400">▾</span>
