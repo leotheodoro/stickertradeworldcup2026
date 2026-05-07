@@ -9,7 +9,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       <div className="pointer-events-none absolute bottom-[-8rem] right-[-6rem] h-72 w-72 rounded-full bg-[#f5c518]/20 blur-3xl" />
       <div className="relative mx-auto flex min-h-screen max-w-6xl items-center px-4 py-10 sm:px-6 lg:px-8">
         <div className="grid w-full gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-          <section className="relative overflow-hidden rounded-[2rem] border border-white/12 bg-white/[0.08] p-8 text-white shadow-[0_30px_80px_rgba(0,0,0,0.28)] backdrop-blur-sm sm:p-10">
+          <section className="order-2 relative overflow-hidden rounded-[2rem] border border-white/12 bg-white/[0.08] p-8 text-white shadow-[0_30px_80px_rgba(0,0,0,0.28)] backdrop-blur-sm sm:p-10 lg:order-1">
             <div className="absolute right-[-4rem] top-[-4rem] h-48 w-48 rounded-full border border-white/12" />
             <div className="absolute bottom-[-5rem] left-[-3rem] h-44 w-44 rounded-full border border-[#f5c518]/18" />
             <div className="pointer-events-none absolute right-[-4rem] top-[-3rem] h-40 w-40 rounded-full bg-white/10 blur-3xl" />
@@ -73,7 +73,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
             </div>
           </section>
 
-          <div className="relative overflow-hidden rounded-[2rem] border border-white/50 bg-white/94 p-8 shadow-[0_28px_72px_rgba(4,20,55,0.28)] backdrop-blur sm:p-10">
+          <div className="order-1 relative overflow-hidden rounded-[2rem] border border-white/50 bg-white/94 p-8 shadow-[0_28px_72px_rgba(4,20,55,0.28)] backdrop-blur sm:p-10 lg:order-2">
             <div className="pointer-events-none absolute right-[-4rem] top-[-4rem] h-32 w-32 rounded-full bg-[#f5c518]/14 blur-3xl" />
             <div className="pointer-events-none absolute bottom-[-5rem] left-[-3rem] h-36 w-36 rounded-full bg-[#06235b]/8 blur-3xl" />
             <div className="relative mb-8">
